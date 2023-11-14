@@ -1,8 +1,8 @@
-#include "ProjectTemplate/hello.hpp"
+#include "yt/hello.hpp"
 
 #include <iostream>
 
-namespace ProjectTemplate
+namespace yt
 {
 
 void hello()

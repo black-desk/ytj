@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ProjectTemplate
+namespace yt
 {
 
 void hello();
