@@ -1,8 +1,8 @@
 pfl_add_executable(
   OUTPUT_NAME
-  hello_world
+  ytj
   SOURCES
   ./src/main.cpp
   LINK_LIBRARIES
   PUBLIC
-  yt)
+  ytj)

@@ -1,18 +1,19 @@
 cmake_minimum_required(VERSION 3.23 FATAL_ERROR)
 
 project(
-  yt
+  ytj
   VERSION 0.1.0
   DESCRIPTION
     "A header only cpp library and a command line tool to convert yaml to json."
   HOMEPAGE_URL "https://github.com/black-desk/yt"
   LANGUAGES CXX)
 
-option(YT_BUILD_EXAMPLES "Build examples of yt or not." ${PROJECT_IS_TOP_LEVEL})
+option(YTJ_BUILD_EXAMPLES "Build examples of ytj or not."
+       ${PROJECT_IS_TOP_LEVEL})
 
-option(YT_ENABLE_TESTING "Enable test of yt or not." ${PROJECT_IS_TOP_LEVEL})
+option(YTJ_ENABLE_TESTING "Enable test of ytj or not." ${PROJECT_IS_TOP_LEVEL})
 
-option(YT_INSTALL "Enable install target or not." ${PROJECT_IS_TOP_LEVEL})
+option(YTJ_INSTALL "Enable install target or not." ${PROJECT_IS_TOP_LEVEL})
 
 include(./cmake/GitSemver.cmake)
 
@@ -22,26 +23,50 @@ include(./cmake/CPM.cmake)
 
 # use CPMFindPackage and find_package to get dependencies here.
 
+CPMFindPackage(
+  NAME nlohmann_json
+  VERSION 3.11.2
+  GITHUB_REPOSITORY nlohmann/json
+  GIT_TAG v3.11.2
+  GIT_SHALLOW ON
+  EXCLUDE_FROM_ALL ON)
+
+CPMFindPackage(
+  NAME yaml-cpp
+  VERSION 0.7.0
+  GITHUB_REPOSITORY jbeder/yaml-cpp
+  GIT_TAG yaml-cpp-0.7.0
+  GIT_SHALLOW ON
+  EXCLUDE_FROM_ALL ON)
+
+if(NOT TARGET yaml-cpp::yaml-cpp)
+  add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
+endif()
+
 include(./cmake/PFL.cmake)
 
-pfl_init(ENABLE_TESTING ${YT_ENABLE_TESTING} BUILD_EXAMPLES
-         ${YT_BUILD_EXAMPLES} INSTALL ${YT_INSTALL})
+pfl_init(ENABLE_TESTING ${YTJ_ENABLE_TESTING} BUILD_EXAMPLES
+         ${YTJ_BUILD_EXAMPLES} INSTALL ${YTJ_INSTALL})
 
-if(YT_ENABLE_TESTING)
+if(YTJ_ENABLE_TESTING)
   enable_testing()
 endif()
 
-# build library yt
+# build library ytj
 pfl_add_library(
+  HEADER_ONLY
   VERSION
   ${PROJECT_VERSION}
   INS
-  ./include/yt/configure.hpp.in
-  ./include/yt/hello.hpp
+  ./include/ytj/ytj.hpp.in
   SOURCES
-  ./src/yt/hello.cpp
+  ./src/ytj/ytj.cpp
   APPS
-  yt
+  ytj
   COMPILE_FEATURES
-  PUBLIC
-  cxx_std_17)
+  INTERFACE
+  cxx_std_17
+  LINK_LIBRARIES
+  INTERFACE
+  nlohmann_json::nlohmann_json
+  yaml-cpp::yaml-cpp)
