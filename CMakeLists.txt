@@ -29,15 +29,19 @@ CPMFindPackage(
   GITHUB_REPOSITORY nlohmann/json
   GIT_TAG v3.11.2
   GIT_SHALLOW ON
-  EXCLUDE_FROM_ALL ON)
+  GIT_PROGRESS ON
+  EXCLUDE_FROM_ALL ON
+  OPTIONS "JSON_Install ON")
 
 CPMFindPackage(
   NAME yaml-cpp
-  VERSION 0.7.0
+  VERSION 0.8.0
   GITHUB_REPOSITORY jbeder/yaml-cpp
-  GIT_TAG yaml-cpp-0.7.0
+  GIT_TAG 0.8.0
   GIT_SHALLOW ON
-  EXCLUDE_FROM_ALL ON)
+  GIT_PROGRESS ON
+  EXCLUDE_FROM_ALL ON
+  OPTIONS "YAML_CPP_INSTALL ON")
 
 if(NOT TARGET yaml-cpp::yaml-cpp)
   add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)

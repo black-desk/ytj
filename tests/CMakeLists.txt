@@ -12,6 +12,7 @@ if(NOT Catch2_FOUND)
 endif()
 
 pfl_add_executable(
+  INTERNAL
   SOURCES
   ./src/ytj/to_json.test.cpp
   ./src/ytj/to_yaml.test.cpp

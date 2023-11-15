@@ -14,7 +14,10 @@ jobs:
       actions: write
     steps:
       - uses: actions/checkout@v4
+      - run: cmake -B build
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
+          files: |
+            ./build/ytj/ytj.hpp
