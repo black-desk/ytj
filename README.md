@@ -1,3 +1,5 @@
-# CPP template
+# ytj
 
-This is a template of my c++ project.
+This project is a simple header-only library contains some functions
+to perform 2-ways convert between YAML::Node and nlohmann::json
+and a little cli program `ytj` to read yaml from file and print json to stdout.
