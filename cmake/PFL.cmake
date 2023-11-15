@@ -26,7 +26,7 @@ function(pfl_init)
   cmake_parse_arguments(PFL_INIT "" "INSTALL;ENABLE_TESTING;BUILD_EXAMPLES"
                         "EXTERNALS" ${ARGN})
 
-  message(STATUS "PFL: --==Version: v0.2.4==--")
+  message(STATUS "PFL: --==Version: v0.2.5==--")
 
   set(PFL_ENABLE_TESTING
       ${PFL_INIT_ENABLE_TESTING}
@@ -50,10 +50,10 @@ function(__pfl_configure_files)
 
     configure_file(${IN_FILE} ${CMAKE_CURRENT_BINARY_DIR}/${OUT_FILE} @ONLY)
 
-    if(OUT_FILE MATCHES "^include\/.*\.h(h|pp)?$")
+    if(OUT_FILE MATCHES "^(./)?include\/.*\.h(h|pp)?$")
       list(APPEND ${PFL_CONFIGURE_FILES_HEADERS}
            ${CMAKE_CURRENT_BINARY_DIR}/${OUT_FILE})
-    elseif(OUT_FILE MATCHES "^src\/.*\.(h(h|pp)?|cpp)$")
+    elseif(OUT_FILE MATCHES "^(./)?src\/.*\.(h(h|pp)?|cpp)$")
       list(APPEND ${PFL_CONFIGURE_FILES_SOURCES}
            ${CMAKE_CURRENT_BINARY_DIR}/${OUT_FILE})
     else()
