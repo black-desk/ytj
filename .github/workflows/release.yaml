@@ -20,4 +20,4 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            ./build/ytj/ytj.hpp
+            ./build/include/ytj/ytj.hpp
