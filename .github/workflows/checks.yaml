@@ -46,5 +46,5 @@ jobs:
           export CFLAGS="$CFLAGS -fsanitize=address,undefined" &&
           export CXXFLAGS="$CFLAGS" &&
           cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.type }}&&
-          cmake --build build &&
-          cmake --build build -t test
+          cmake --build build -j &&
+          cmake --build build -t test -j
