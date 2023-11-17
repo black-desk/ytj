@@ -50,3 +50,10 @@ jobs:
       - name: Run tests
         run: |
           cmake --build build -t test -j
+  pass:
+    name: Pass
+    needs: [checks, build-and-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: true
