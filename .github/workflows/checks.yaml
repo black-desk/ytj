@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: black-desk/checks@master
   build-and-test:
-    name: Build
+    name: Build and tests
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
