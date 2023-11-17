@@ -16,13 +16,22 @@ jobs:
     name: Build
     runs-on: "ubuntu-latest"
     steps:
-      - name: Checkout project.
+      - name: Checkout project
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Build project with cmake.
+      - uses: hendrikmuhs/ccache-action@v1.2
+      - name: Cache CPM.cmake Source
+        uses: actions/cache@v3
+        with:
+          path: .cache/cpm/source
+          key: ${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
+      - name: Build project with cmake
         run: |
+          mkdir -p .cache/cpm/source &&
+          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH" &&
           export CPM_DOWNLOAD_ALL="ON" &&
+          export CPM_SOURCE_CACHE="$PWD/.cache/cpm/source" &&
           export CFLAGS="$CFLAGS -Wall" &&
           export CFLAGS="$CFLAGS -Wextra" &&
           export CFLAGS="$CFLAGS -Wpedantic" &&
