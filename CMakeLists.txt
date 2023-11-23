@@ -5,7 +5,7 @@ project(
   VERSION 0.1.0
   DESCRIPTION
     "A header only cpp library and a command line tool to convert yaml to json."
-  HOMEPAGE_URL "https://github.com/black-desk/yt"
+  HOMEPAGE_URL "https://github.com/black-desk/ytj"
   LANGUAGES CXX)
 
 option(YTJ_BUILD_EXAMPLES "Build examples of ytj or not."
