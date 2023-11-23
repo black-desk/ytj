@@ -48,7 +48,7 @@ pfl_init(ENABLE_TESTING ${YTJ_ENABLE_TESTING} BUILD_EXAMPLES
          ${YTJ_BUILD_EXAMPLES} INSTALL ${YTJ_INSTALL})
 
 if(YTJ_ENABLE_TESTING)
-  enable_testing()
+  include(CTest)
 endif()
 
 # build library ytj
