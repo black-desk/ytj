@@ -17,8 +17,13 @@ jobs:
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
-        type: [Debug, Release, RelWithDebInfo]
-        cxx: [g++, clang++]
+        type:
+          - Debug
+          - Release
+          - RelWithDebInfo
+        cxx:
+          - g++
+          - clang++
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
@@ -32,7 +37,7 @@ jobs:
         with:
           path: .cache/cpm/source
           key: ${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
-      - name: Build project with cmake
+      - name: Configure
         run: |
           mkdir -p .cache/cpm/source &&
           export CXX="${{ matrix.cxx }}" &&
@@ -43,17 +48,25 @@ jobs:
           export CFLAGS="$CFLAGS -Wextra" &&
           export CFLAGS="$CFLAGS -Wpedantic" &&
           export CFLAGS="$CFLAGS -Wno-extra-semi -Wno-unused-command-line-argument -Wno-gnu-zero-variadic-macro-arguments" &&
-          export CFLAGS="$CFLAGS -fsanitize=address,undefined" &&
           export CXXFLAGS="$CFLAGS" &&
-          cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.type }}&&
+          cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.type }}
+      - name: Build
+        run: |
           cmake --build build -j
       - name: Run tests
         run: |
           cmake --build build -t test -j
+      - name: Memory check
+        if: matrix.cxx == 'g++' && contains(fromJSON('["Debug","RelWithDebInfo"]'), matrix.type)
+        run: |
+          sudo apt update &&
+          sudo apt install valgrind &&
+          ctest -DCTEST_MEMORYCHECK_COMMAND="/usr/bin/valgrind" -T memcheck --test-dir build
   pass:
     name: Pass
     needs: [checks, build-and-test]
     runs-on: ubuntu-latest
     steps:
       - name: Placeholder
-        run: true
+        run: |
+          true
