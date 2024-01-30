@@ -26,7 +26,7 @@ function(pfl_init)
   cmake_parse_arguments(PFL_INIT "" "INSTALL;ENABLE_TESTING;BUILD_EXAMPLES"
                         "EXTERNALS" ${ARGN})
 
-  message(STATUS "PFL: --==Version: v0.2.5==--")
+  message(STATUS "PFL: --==Version: v0.2.9==--")
 
   set(PFL_ENABLE_TESTING
       ${PFL_INIT_ENABLE_TESTING}
@@ -37,6 +37,10 @@ function(pfl_init)
   set(PFL_INSTALL
       ${PFL_INIT_INSTALL}
       PARENT_SCOPE)
+  set(PFL_PREFIX
+      ${PROJECT_NAME}
+      PARENT_SCOPE)
+
   foreach(EXTERNAL ${PFL_INIT_EXTERNALS})
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/external/${EXTERNAL})
   endforeach()
@@ -166,23 +170,32 @@ function(pfl_add_library)
 
   cmake_path(GET CMAKE_CURRENT_SOURCE_DIR FILENAME TARGET_DIR_NAME)
 
+  if(TARGET_DIR_NAME MATCHES ".*__.*")
+    message(
+      FATAL_ERROR "Invalid directory name ${TARGET_DIR_NAME} contains '__'.")
+  endif()
+
   if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${PROJECT_SOURCE_DIR}")
     set(TARGET_DIR_NAME ${PROJECT_NAME})
+    if(NOT PFL_ADD_LIBRARY_OUTPUT_NAME)
+      set(PFL_ADD_LIBRARY_OUTPUT_NAME ${PROJECT_NAME})
+    endif()
   endif()
 
   string(REPLACE " " "_" TARGET_NAME "${TARGET_DIR_NAME}")
 
   string(REPLACE "::" "__" TARGET_PREFIX "${PFL_PREFIX}")
 
-  if(TARGET_PREFIX)
-    set(TARGET_NAME "${TARGET_PREFIX}__${TARGET_NAME}")
-  endif()
-
+  set(TARGET_NAME "${TARGET_PREFIX}__${TARGET_NAME}")
   string(REPLACE "__" "::" TARGET_EXPORT_NAME "${TARGET_NAME}")
+
+  if(NOT PFL_ADD_LIBRARY_OUTPUT_NAME)
+    set(PFL_ADD_LIBRARY_OUTPUT_NAME ${TARGET_NAME})
+  endif()
 
   message(
     STATUS
-      "PFL:${PFL_MESSAGE_INDENT} Adding library ${TARGET_EXPORT_NAME} at ${CMAKE_CURRENT_SOURCE_DIR}"
+      "PFL:${PFL_MESSAGE_INDENT} Adding library ${PFL_ADD_LIBRARY_OUTPUT_NAME} as ${TARGET_EXPORT_NAME} at ${CMAKE_CURRENT_SOURCE_DIR}"
   )
   set(PFL_MESSAGE_INDENT "${PFL_MESSAGE_INDENT}  ")
 
@@ -210,10 +223,8 @@ function(pfl_add_library)
   set_target_properties("${TARGET_NAME}" PROPERTIES EXPORT_NAME
                                                     ${TARGET_DIR_NAME})
 
-  if(PFL_ADD_LIBRARY_OUTPUT_NAME)
-    set_target_properties("${TARGET_NAME}"
-                          PROPERTIES OUTPUT_NAME ${PFL_ADD_LIBRARY_OUTPUT_NAME})
-  endif()
+  set_target_properties("${TARGET_NAME}"
+                        PROPERTIES OUTPUT_NAME ${PFL_ADD_LIBRARY_OUTPUT_NAME})
 
   target_sources(
     ${TARGET_NAME}
@@ -351,13 +362,17 @@ function(pfl_add_executable)
 
   string(REPLACE "::" "__" TARGET_PREFIX "${PFL_PREFIX}")
 
-  if(TARGET_PREFIX)
-    set(TARGET_NAME "${TARGET_PREFIX}__${TARGET_NAME}")
+  set(TARGET_NAME "${TARGET_PREFIX}__${TARGET_NAME}")
+
+  string(REPLACE "__" "::" TARGET_EXPORT_NAME "${TARGET_NAME}")
+
+  if(NOT PFL_ADD_EXECUTABLE_OUTPUT_NAME)
+    set(PFL_ADD_EXECUTABLE_OUTPUT_NAME "${TARGET_NAME}")
   endif()
 
   message(
     STATUS
-      "PFL:${PFL_MESSAGE_INDENT} Adding executable ${TARGET_NAME} at ${CMAKE_CURRENT_SOURCE_DIR}"
+      "PFL:${PFL_MESSAGE_INDENT} Adding executable ${PFL_ADD_EXECUTABLE_OUTPUT_NAME} as ${TARGET_EXPORT_NAME} at ${CMAKE_CURRENT_SOURCE_DIR}"
   )
   set(PFL_MESSAGE_INDENT "${PFL_MESSAGE_INDENT}  ")
 
@@ -367,10 +382,12 @@ function(pfl_add_executable)
 
   add_executable("${TARGET_NAME}" ${PFL_ADD_EXECUTABLE_SOURCES})
 
-  if(PFL_ADD_EXECUTABLE_OUTPUT_NAME)
-    set_target_properties(
-      "${TARGET_NAME}" PROPERTIES OUTPUT_NAME ${PFL_ADD_EXECUTABLE_OUTPUT_NAME})
+  if(NOT "${TARGET_EXPORT_NAME}" STREQUAL "${TARGET_NAME}")
+    add_executable("${TARGET_EXPORT_NAME}" ALIAS "${TARGET_NAME}")
   endif()
+
+  set_target_properties(
+    "${TARGET_NAME}" PROPERTIES OUTPUT_NAME ${PFL_ADD_EXECUTABLE_OUTPUT_NAME})
 
   target_sources(
     ${TARGET_NAME}
