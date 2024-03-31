@@ -21,26 +21,22 @@ gitsemver(PROJECT_VERSION)
 
 include(./cmake/CPM.cmake)
 
-if(NOT TARGET nlohmann_json::nlohmann_json)
-  CPMFindPackage(
-    NAME nlohmann_json
-    VERSION 3.11.2
-    URL "https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz"
-    EXCLUDE_FROM_ALL ON
-    OPTIONS "JSON_Install ON")
-endif()
+CPMFindPackage(
+  NAME nlohmann_json
+  VERSION 3.11.2
+  URL "https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz"
+  EXCLUDE_FROM_ALL ON
+  OPTIONS "JSON_Install ON")
 
-if(NOT TARGET yaml-cpp)
-  CPMFindPackage(
-    NAME yaml-cpp
-    VERSION 0.8.0
-    GITHUB_REPOSITORY jbeder/yaml-cpp
-    GIT_TAG 0.8.0
-    GIT_SHALLOW ON
-    GIT_PROGRESS ON
-    EXCLUDE_FROM_ALL ON
-    OPTIONS "YAML_CPP_INSTALL ON")
-endif()
+CPMFindPackage(
+  NAME yaml-cpp
+  VERSION 0.8.0
+  GITHUB_REPOSITORY jbeder/yaml-cpp
+  GIT_TAG 0.8.0
+  GIT_SHALLOW ON
+  GIT_PROGRESS ON
+  EXCLUDE_FROM_ALL ON
+  OPTIONS "YAML_CPP_INSTALL ON")
 
 if(NOT TARGET yaml-cpp::yaml-cpp)
   add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
