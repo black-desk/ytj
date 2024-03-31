@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.23 FATAL_ERROR)
 
 project(
   ytj
-  VERSION 0.1.0
+  VERSION 0.1.4
   DESCRIPTION
     "A header only cpp library and a command line tool to convert yaml to json."
   HOMEPAGE_URL "https://github.com/black-desk/ytj"
