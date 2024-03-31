@@ -52,6 +52,8 @@ pfl_init(AUTO)
 
 # build library ytj
 pfl_add_library(
+  OUTPUT_NAME
+  ytj
   MERGED_HEADER_PLACEMENT
   LIBRARY_TYPE
   HEADER_ONLY
