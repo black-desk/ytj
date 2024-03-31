@@ -1,5 +1,4 @@
-#include <catch2/catch_test_macros.hpp>
-
+#include "ytj/find_catch2.hpp"
 #include "ytj/ytj.hpp"
 
 using nlohmann::json;

@@ -828,6 +828,7 @@ endmacro()
 
 # export variables available to the caller to the parent scope expects ${CPM_ARGS_NAME} to be set
 macro(cpm_export_variables name)
+  message(WARNING "${name}_SOURCE_DIR ${${name}_SOURCE_DIR}")
   set(${name}_SOURCE_DIR
       "${${name}_SOURCE_DIR}"
       PARENT_SCOPE

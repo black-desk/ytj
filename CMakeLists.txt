@@ -52,11 +52,12 @@ pfl_init(AUTO)
 
 # build library ytj
 pfl_add_library(
+  MERGED_HEADER_PLACEMENT
   LIBRARY_TYPE
   HEADER_ONLY
   SOURCES
-  ./include/ytj/ytj.hpp.in
-  ./src/ytj/ytj.cpp
+  src/ytj/ytj.cpp
+  src/ytj/ytj.hpp.in
   APPS
   ytj
   TESTS

@@ -1,5 +1,4 @@
-#include <catch2/catch_test_macros.hpp>
-
+#include "ytj/find_catch2.hpp"
 #include "ytj/ytj.hpp"
 
 using nlohmann::json;
@@ -18,9 +17,9 @@ TEST_CASE("to_json")
                         { R"(-1.1)", R"(-1.1)"_json },
                 };
 
-                for (auto it = cases.begin(); it != cases.end(); it++) {
-                        auto yaml = it->first;
-                        auto json = it->second;
+                for (const auto &it : cases) {
+                        auto yaml = it.first;
+                        auto json = it.second;
                         REQUIRE(to_json(YAML::Load(yaml)) == json);
                 }
         }
@@ -40,9 +39,9 @@ TEST_CASE("to_json")
                         { R"([-1.1,[-1.1]])", R"([-1.1,[-1.1]])"_json },
                 };
 
-                for (auto it = cases.begin(); it != cases.end(); it++) {
-                        auto yaml = it->first;
-                        auto json = it->second;
+                for (const auto &it : cases) {
+                        auto yaml = it.first;
+                        auto json = it.second;
                         REQUIRE(to_json(YAML::Load(yaml)) == json);
                 }
         }
@@ -55,9 +54,9 @@ TEST_CASE("to_json")
                         { R"([{a: 1}])", R"([{"a":1}])"_json },
                 };
 
-                for (auto it = cases.begin(); it != cases.end(); it++) {
-                        auto yaml = it->first;
-                        auto json = it->second;
+                for (const auto &it : cases) {
+                        auto yaml = it.first;
+                        auto json = it.second;
                         REQUIRE(to_json(YAML::Load(yaml)) == json);
                 }
         }
