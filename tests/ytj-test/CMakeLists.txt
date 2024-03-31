@@ -12,12 +12,14 @@ if(NOT Catch2_FOUND)
 endif()
 
 pfl_add_executable(
-  INTERNAL
+  DISABLE_INSTALL
+  OUTPUT_NAME
+  ytj_test
   SOURCES
-  ./src/ytj/to_json.test.cpp
-  ./src/ytj/to_yaml.test.cpp
+  src/ytj/to_json.test.cpp
+  src/ytj/to_yaml.test.cpp
   LINK_LIBRARIES
-  PUBLIC
+  PRIVATE
   ytj::ytj
   Catch2::Catch2WithMain)
 
@@ -25,4 +27,5 @@ include(Catch)
 
 # NOTE: add_custom_command cannot use with ALIAS target. Check
 # https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9201.
-catch_discover_tests(ytj__ytj__tests)
+get_real_target_name(test ytj::ytj::ytj_test)
+catch_discover_tests(${test})
