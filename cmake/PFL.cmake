@@ -34,7 +34,7 @@ endif()
 
 set_property(GLOBAL PROPERTY PFL_INITIALIZED true)
 
-set(_PFL_VERSION "v0.4.2")
+set(_PFL_VERSION "v0.4.3")
 
 set(_PFL_BUG_REPORT_MESSAGE
     [=[
@@ -300,7 +300,7 @@ macro(PFL_init)
   set(_PFL_ENABLE_EXTERNALS ${PFL_INIT_ENABLE_EXTERNALS})
   set(_PFL_ENABLE_APPLICATIONS ${PFL_INIT_ENABLE_APPLICATIONS})
 
-  if(pfl_INIT_ENABLE_TESTING)
+  if(PFL_INIT_ENABLE_TESTING)
     enable_testing()
   endif()
 
