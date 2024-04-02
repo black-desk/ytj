@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.11.4 FATAL_ERROR)
 
 project(
   ytj
@@ -18,11 +18,23 @@ function(get_real_target_name output target)
       PARENT_SCOPE)
 endfunction()
 
-include(./cmake/GitSemver.cmake)
-
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(PFL)
+include(GitSemver)
 gitsemver(PROJECT_VERSION)
-
-include(./cmake/CPM.cmake)
+if(CMAKE_VERSION VERSION_LESS "3.14")
+  message(
+    STATUS "cmake version ${CMAKE_VERSION} not compatible with CPM.cmake, "
+           "CPMFindPackage fallback to simply find_package.")
+  # Only function we used in CPM.cmake is CPMFindPackage
+  function(CPMFindPackage)
+    cmake_parse_arguments(ARG "" "NAME;VERSION;FIND_PACKAGE_ARGUMENTS" "")
+    string(REPLACE " " ";" EXTRA_ARGS "${ARG_FIND_PACKAGE_ARGUMENTS}")
+    find_package(${ARG_NAME} ${ARG_VERSION} REQUIRED ${EXTRA_ARGS})
+  endfunction()
+else()
+  include(CPM)
+endif()
 
 CPMFindPackage(
   NAME nlohmann_json
